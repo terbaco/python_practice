@@ -14,7 +14,7 @@ def run_game():
     pygame.init()
     ai_setting = Settings()
     screen = pygame.display.set_mode((ai_setting.screen_width, ai_setting.screen_height))
-    pygame.display.set_caption("ALienInvasion")
+    pygame.display.set_caption("AlienInvasion")
 
     play_button = Button(ai_setting, screen, "Play")
     ship = Ship(ai_setting, screen)
@@ -23,16 +23,13 @@ def run_game():
 
     stats = GameStats(ai_setting)
     while True:
-        gf.check_events(ai_setting, screen, stats, play_button, ship, bullets)
-
+        gf.check_events(ai_setting, screen, stats, play_button, ship, aliens, bullets)
+        if stats.game_active:
+            ship.update()
+            gf.update_aliens(ai_setting, stats, screen,ship, aliens, bullets)
+            gf.update_bullets(aliens, screen, ship, aliens, bullets)
+#            gf.create_fleet(ai_setting, screen, aliens)
         gf.update_screen(ai_setting, screen, stats, ship, aliens, bullets, play_button)
-#        if stats.game_active:
-        ship.update()
-        gf.update_aliens(ai_setting, stats, screen,ship, aliens, bullets)
-        gf.update_bullets(aliens, screen, ship, aliens, bullets)
-#        gf.create_fleet(ai_setting, screen, aliens)
 
-#        else:
-#            break
 
 run_game()
