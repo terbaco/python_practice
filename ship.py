@@ -5,7 +5,7 @@ class Ship():
     def __init__(self, ai_settings, screen):
         self.screen = screen
         self.ai_setting = ai_settings
-        self.speed = 1.0
+#        self.speed = 1.0
 
         self.image = pygame.image.load('images/ship.bmp')
         self.rect = self.image.get_rect()
@@ -23,7 +23,8 @@ class Ship():
         self.moving_up = False
 
     def update(self):
-        moving = self.ai_setting.ship_speed_factor * self.speed
+        moving = self.ai_setting.ship_speed_factor +\
+                 self.ai_setting.ship_speed_factor_step * self.ai_setting.game_level
         if self.moving_right and (self.rect.right + moving) < self.screen_rect.right:
             self.centerx += moving
         elif self.moving_left and (self.rect.left - moving) > self.screen_rect.left:
