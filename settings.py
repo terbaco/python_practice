@@ -34,3 +34,7 @@ class Settings():
 #                          , 325, 385, 450, 520, 595, 675, 760, 850
 #                          , 945, 1045, 1150]
 
+    def reset_setting(self):
+        self.alien_speed_factor = 1.0
+        self.bullet_speed_factor = 1.0
+        self.ship_speed_factor = 1.0

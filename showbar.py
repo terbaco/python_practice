@@ -33,6 +33,9 @@ class ShowBar():
         elif str(position).lower() == 'rightbottom':
             self.score_rect.right = self.screen_rect.right - 100
             self.score_rect.bottom = self.screen_rect.bottom - 10
+        elif str(position).lower() == 'center':
+            self.score_rect.right = self.screen_rect.right - 100
+            self.score_rect.bottom = self.screen_rect.bottom - 10
 
     def show_bar(self, value):
         text_show = self.description + ' : ' + str(value)

@@ -56,7 +56,8 @@ def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_bu
 
     sb.show_bar(stats.score)
     show_level.show_bar(stats.game_level)
-    show_highest.show_bar(stats.highest_score)
+    if stats.highest_score != 0:
+        show_highest.show_bar(stats.highest_score)
 
     if not stats.game_active:
         play_button.draw_button()
@@ -226,6 +227,7 @@ def ship_hit(ai_setting, stats, screen, ship, aliens, bullets):
     ship.center_ship()
 
     sleep(0.5)
+    ai_setting.reset_setting()
 
 def check_aliens_bottom(ai_setting, stats, screen, ship, aliens, bullets):
     screen_rect = screen.get_rect()
