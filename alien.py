@@ -1,10 +1,13 @@
 import pygame
 
 from pygame.sprite import Sprite
+from settings import Settings
 
 class Alien(Sprite):
-    def __init__(self, aisettings, screen):
+    def __init__(self, aisettings, screen, x_factor, y_factor, level=1, direction=1, position=None):
         super().__init__()
+        print("x=" + str(x_factor) + '; y=' + str(y_factor) + '; level=' + str(level) + '; direction' + str(direction)
+              + 'position' + str(position))
         self.screen = screen
         self.screen_rect = screen.get_rect()
         self.ai_settings = aisettings
@@ -12,23 +15,53 @@ class Alien(Sprite):
         self.image = pygame.image.load('images/alien.bmp')
         self.rect = self.image.get_rect()
 
-        self.rect.x = 0
-        self.rect.y = 0
+        self.level_private = level
+        self.setting_private = Settings()
+        self.setting_private.alien_x_speed_factor_step *= x_factor
+        self.setting_private.alien_y_speed_factor_step *= y_factor
+        self.setting_private.alien_x_speed_factor = (self.setting_private.alien_x_speed_factor_step * self.level_private)
+        self.setting_private.alien_y_speed_factor = (self.setting_private.alien_y_speed_factor_step * self.level_private)
+
+        if position != None:
+            self.rect.x = position[0]
+            self.rect.y = position[1]
+        else:
+            self.rect.x = self.screen_rect.centerx
+            self.rect.y = self.screen_rect.centery
+
 #        self.rect.x = self.rect.width
 #        self.rect.y = self.rect.height
 
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
 
+        self.direction = direction
         self.speed = 0.1
+        '''set alien level'''
 #        self.speed_factor = 1.0
 
     def update(self):
-        moving = self.ai_settings.alien_speed_factor * self.speed
-        self.x += (self.ai_settings.alien_speed_factor * self.speed * self.ai_settings.fleet_direction)
-        self.rect.x = int(self.x + 0.5)
-#        self.y = float( moving + self.y)
-#        self.rect.y = int(self.y + 0.5)
+        '''moving distance'''
+        x_moving = self.setting_private.alien_x_speed_factor * self.speed
+        y_moving = self.setting_private.alien_y_speed_factor * self.speed
+
+        '''new x position'''
+        right_estimated = self.rect.right + x_moving * self.direction
+        if right_estimated > self.screen.get_rect().width:
+            self.direction *= -1
+            self.x += x_moving * self.direction
+            self.rect.x = int(self.x)
+        elif self.x + x_moving * self.direction < 0:
+            self.direction *= -1
+            self.x = 0 + x_moving * self.direction
+            self.rect.x = int(self.x)
+        else:
+            self.x += (x_moving * self.direction)
+            self.rect.x = int(self.x)
+
+        '''new y position'''
+        self.y = float( y_moving + self.y)
+        self.rect.y = int(self.y)
 
     def blitme(self):
         self.screen.blit(self.image, self.rect)
